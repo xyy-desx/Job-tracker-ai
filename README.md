@@ -1,16 +1,76 @@
-# React + Vite
+# 💼 Job-Tracker-AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack **Job Tracking and Analytics Dashboard** built with **React**, **Vite**, **Tailwind CSS**, **Node.js**, **Express**, and **PostgreSQL**.  
+This platform helps users efficiently manage, visualize, and monitor their job applications — from submission to hiring — with an intuitive interface and dynamic data insights.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📝 Project Overview
 
-## React Compiler
+**Job-Tracker-AI** is designed to simplify the job hunting process by allowing users to track applications, view statistics, and analyze their progress in one place.  
+It provides a clear and interactive dashboard that turns job searching into a more organized and data-driven experience.  
+The system also aims to integrate **n8n automations** in the future for smarter notifications and workflow automation.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+✅ Track job applications with details like company, position, date, and status  
+✅ Interactive charts and dashboards for better visualization  
+✅ Fast and optimized frontend using **Vite + React + Tailwind CSS**  
+✅ Secure backend with **Node.js** and **Express**  
+✅ Reliable data management powered by **PostgreSQL**  
+✅ Scalable and modular structure for future improvements  
+
+---
+
+## 🧠 Upcoming Enhancements
+
+🔹 **n8n Automation Integration** – Coming soon  
+Automate your workflow with:  
+- Email notifications for job status updates  
+- Workflow triggers that connect actions directly to your database  
+- Real-time data syncing for smoother tracking  
+
+🔹 Smart notifications and data-driven insights  
+🔹 Expanded analytics and visual reports  
+
+---
+
+## 🧰 Tech Stack
+
+| Layer | Technology |
+|-------|-------------|
+| Frontend | React, Vite, Tailwind CSS |
+| Backend | Node.js, Express |
+| Database | PostgreSQL |
+| Automation (soon) | n8n |
+| Version Control | Git & GitHub |
+
+---
+
+## 👤 Author
+
+**Desxzor O. Navarro**  
+Full-stack developer passionate about automation and system integration.  
+This project is part of an **upskilling journey** in web development and backend automation.
+ 
+---
+
+## ⚖️ License
+
+This project is currently **unlicensed** and for **personal and educational purposes only**.  
+All rights reserved © 2025 **Desxzor O. Navarro**
+
+---
+
+## 🌟 Acknowledgments
+
+Special thanks to the open-source tools that power this project:
+- **React** & **Vite** – Fast, modern frontend development  
+- **Tailwind CSS** – Clean and responsive styling  
+- **Node.js** & **Express** – Backend and REST API  
+- **PostgreSQL** – Reliable data storage and management  
+- **n8n** – Workflow automation (coming soon)  
+
+---
