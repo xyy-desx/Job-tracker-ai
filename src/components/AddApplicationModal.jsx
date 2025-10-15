@@ -3,14 +3,49 @@ import { X } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 
+// Source options for dropdown
+const SOURCE_OPTIONS = [
+  "JobStreet",
+  "LinkedIn",
+  "Indeed",
+  "Glassdoor",
+  "Kalibrr",
+  "Other"
+];
+
+// Salary options in PHP (₱), starting from 18k upward
+const SALARY_OPTIONS = [
+  "18000",
+  "20000",
+  "25000",
+  "30000",
+  "35000",
+  "40000",
+  "45000",
+  "50000",
+  "55000",
+  "60000",
+  "65000",
+  "70000",
+  "75000",
+  "80000",
+  "85000",
+  "90000",
+  "95000",
+  "100000",
+  "Other"
+];
+
 const AddApplicationModal = ({ isOpen, onClose, onAdded }) => {
   const [company, setCompany] = useState("");
   const [position, setPosition] = useState("");
   const [source, setSource] = useState("");
+  const [customSource, setCustomSource] = useState("");
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("Applied");
   const [automation, setAutomation] = useState("Manual");
   const [salary, setSalary] = useState("");
+  const [customSalary, setCustomSalary] = useState("");
   const [location, setLocation] = useState("");
   const [notes, setNotes] = useState("");
 
@@ -20,17 +55,22 @@ const AddApplicationModal = ({ isOpen, onClose, onAdded }) => {
     e.preventDefault();
     const formattedDate = date ? new Date(date).toISOString().split("T")[0] : null;
 
+    // Source
+    const finalSource = source === "Other" ? customSource : source;
+    // Salary
+    const finalSalary = salary === "Other" ? customSalary : salary;
+
     try {
       const { data: newApp } = await axios.post(
-        "http://localhost:5000/api/automations/recent-applications",
+        "/api/automations/recent-applications",
         {
           company,
           position,
-          source,
+          source: finalSource,
           date: formattedDate,
           status,
           automation,
-          salary,
+          salary: finalSalary,
           location,
           notes,
         }
@@ -39,13 +79,16 @@ const AddApplicationModal = ({ isOpen, onClose, onAdded }) => {
       onAdded(newApp);
       onClose();
 
+      // Reset fields after submit
       setCompany("");
       setPosition("");
       setSource("");
+      setCustomSource("");
       setDate("");
       setStatus("Applied");
       setAutomation("Manual");
       setSalary("");
+      setCustomSalary("");
       setLocation("");
       setNotes("");
     } catch (err) {
@@ -99,13 +142,33 @@ const AddApplicationModal = ({ isOpen, onClose, onAdded }) => {
             className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
-          <input
-            type="text"
-            placeholder="Source"
+          {/* Source Dropdown */}
+          <select
             value={source}
             onChange={(e) => setSource(e.target.value)}
             className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+            required
+          >
+            <option value="" disabled>
+              Select Source
+            </option>
+            {SOURCE_OPTIONS.map((src) => (
+              <option key={src} value={src}>
+                {src}
+              </option>
+            ))}
+          </select>
+          {/* Custom Source Field (Only if "Other" is selected) */}
+          {source === "Other" && (
+            <input
+              type="text"
+              placeholder="Enter source"
+              value={customSource}
+              onChange={(e) => setCustomSource(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          )}
           <input
             type="date"
             value={date}
@@ -139,31 +202,50 @@ const AddApplicationModal = ({ isOpen, onClose, onAdded }) => {
               <option>Auto</option>
             </select>
           </div>
-          <input
-            type="number"
-            placeholder="Salary (PHP)"
+          {/* Salary Dropdown and Custom Entry */}
+          <select
             value={salary}
             onChange={(e) => setSalary(e.target.value)}
             className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+            required
+          >
+            <option value="" disabled>
+              Select Salary (PHP)
+            </option>
+            {SALARY_OPTIONS.map((amt) => (
+              <option key={amt} value={amt}>
+                {amt === "Other"
+                  ? "Other"
+                  : `₱${amt.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
+              </option>
+            ))}
+          </select>
+          {/* Custom Salary Field (Only if "Other" is selected) */}
+          {salary === "Other" && (
+            <input
+              type="number"
+              min={18000}
+              placeholder="Enter Salary (PHP)"
+              value={customSalary}
+              onChange={(e) => setCustomSalary(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          )}
           <textarea
             placeholder="Notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             className="w-full border border-gray-300 rounded-lg p-2 sm:p-3 text-sm sm:text-base h-24 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-        </form>
-
-        {/* Fixed Button Area */}
-        <div className="px-6 pb-6">
+          {/* Save Button inside the form! */}
           <button
             type="submit"
-            form="add-application-form"
             className="w-full bg-blue-600 text-white py-2 sm:py-3 rounded-lg hover:bg-blue-700 transition font-medium"
           >
             Save Application
           </button>
-        </div>
+        </form>
       </motion.div>
     </motion.div>
   );
