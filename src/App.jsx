@@ -1,15 +1,20 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./Pages/Dashboard";
 import Applications from "./Pages/Applications";
-import Reports from "./Pages/Reports"; // ✅ Capitalize folder name for consistency
+import Reports from "./Pages/Reports";
 import Automations from "./Pages/Automations";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+import Profile from "./components/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 function App() {
   const [applications, setApplications] = useState([]);
-  const [sidebarWidth, setSidebarWidth] = useState(250); // ✅ Track sidebar width
+  const [sidebarWidth, setSidebarWidth] = useState(250);
+  const location = useLocation();
 
   const fetchApplications = async () => {
     try {
@@ -40,30 +45,51 @@ function App() {
     setApplications((prev) => [newApp, ...prev]);
   };
 
+  // Only show sidebar on protected (main) pages
+  const showSidebar = !['/login', '/signup'].includes(location.pathname);
+
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
-      {/* ✅ Sidebar with callback to adjust content margin */}
-      <Sidebar onToggleWidth={setSidebarWidth} />
-
-      {/* ✅ Main Content Area */}
+      {showSidebar && <Sidebar onToggleWidth={setSidebarWidth} />}
       <main
-        className="flex-1 overflow-y-auto bg-gray-50 transition-all duration-300 p-6"
-        style={{ marginLeft: `${sidebarWidth}px` }} // dynamically adjust based on sidebar
+        className={`flex-1 overflow-y-auto bg-gray-50 transition-all duration-300 p-6 ${!showSidebar ? "flex items-center justify-center bg-gradient-to-br from-blue-100 via-blue-50 to-white" : ""}`}
+        style={showSidebar ? { marginLeft: `${sidebarWidth}px` } : {}}
       >
         <Routes>
-          <Route path="/" element={<Dashboard applications={applications} />} />
-          <Route
-            path="/applications"
-            element={
+          {/* Public access routes */}
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+
+          {/* Protected routes */}
+          <Route path="/" element={
+            <ProtectedRoute>
+              <Dashboard applications={applications} />
+            </ProtectedRoute>
+          } />
+          <Route path="/applications" element={
+            <ProtectedRoute>
               <Applications
                 applications={applications}
                 onDelete={handleDelete}
                 onAdd={handleAdd}
               />
-            }
-          />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/automations" element={<Automations />} />
+            </ProtectedRoute>
+          } />
+          <Route path="/reports" element={
+            <ProtectedRoute>
+              <Reports />
+            </ProtectedRoute>
+          } />
+          <Route path="/automations" element={
+            <ProtectedRoute>
+              <Automations />
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
         </Routes>
       </main>
     </div>
